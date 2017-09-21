@@ -1,0 +1,107 @@
+#1 How many earthquakes are listed in the table?
+#The answer should equal to the total lines of the file minus 1. Based on observations, each line is a individual record for an individual event
+#unix command
+wc -l signif.txt.tsv
+#answer produced: 5959 signif.txt.tsv
+#the final answer should be 5958 for the total number of earthquakes
+
+
+#2 How many columns are in the table?
+#unix command:
+head -n 1 signif.txt.tsv | wc -w
+#answer: 47
+
+#3Use the cut command to create a new file that just has the data from the columns for YEAR, EQ_PRIMARY and COUNTRY. Hint: you can get the column numbers by using the head command to view the first row and then visuall$
+#unix command:
+cut -f 3,10,18  signif.txt.tsv > Year_Mag_Country.tsv
+#answer:no standard output, but a file that contains three needed data columns has been created.
+
+#4 EQ_PRIMARY is the assigned earthquake magnitude. With your new file 'Year_Mag_Country.tsv', sort the data based on the numeric value of the EQ_PRIMARY column, then list the lines for the top ten largest earthquakes.
+#unix command:
+sort -k 2  Year_Mag_Country.tsv | tail -n 10
+#answer:
+2010	 8.8	CHILE
+1716	 8.8	PERU
+1812	 8.8	USA
+1952	 9.0	RUSSIA
+1700	 9.0	USA
+2004	 9.1	INDONESIA
+2011	 9.1	JAPAN
+1964	 9.2	USA
+1960	 9.5	CHILE
+YEAR	EQ_PRIMARY	COUNTRY
+
+#5 How many unique countries are listed in the database? Use cut,sort,uniq, wc and a few pipes | to form a single expression that answers this question.
+#unix command:
+cut -f 18 signif.txt.tsv | sort | uniq | wc -l
+#the 18th column is the coountry column, sorted countries' name uniquely and then counted lines
+#answer: 154
+
+#6 Use the grep command to count how many earthquakes in the database are located in the USA or USA TERRITORY
+#unix command:
+grep -w USA Year_Mag_Country.tsv | wc -l
+answer: 294
+
+#7 Expanding on the previous exercise, refine your command sequence so that it only counts earthquakes in the USA and not ones in USA TERRITORY. Hint: use the -v argument with grep and you may need to call grep more th$
+#unix command:
+grep -w "USA" Year_Mag_Country.tsv | grep -w -v "USA TERRITORY" | wc -l
+# extract lines containes "USA" which would also contains "USA TERRITORY", so the next step
+#of this pipeline is to exclude lines with "USA TERRITORY"
+#answer: 255
+
+#8 Compute the total number of earthquakes in each country and then display the top ten countries along with the number of earthquakes. Hint: this can be done with a command sequence similar to exercise 5, but requires$
+#unix command:
+cut -f 3  Year_Mag_Country.tsv | sort | uniq -c | sort -n | tail -n 10
+#answer: 
+ 193 MEXICO
+ 207 PHILIPPINES
+ 255 USA
+ 259 GREECE
+ 319 TURKEY
+ 324 ITALY
+ 363 INDONESIA
+ 365 IRAN
+ 400 JAPAN
+ 579 CHINA
+
+#9 Create a shell script named countEq.sh that returns the total number of earthquakes for a given country, where the country is specified as the option when calling the script. Hint: see the Shell Script notes and use$
+#unix command:
+nano countEQ.sh
+#after initiate the shell script, write the script and run it using the next command
+bash countEQ.sh USA
+#answer: 294
+
+#10 Create a shell script named countEq_getLargestEq.sh that returns both the total number of earthquakes AND the largest earthquake for a given country, where the country is specified as the option when calling the sc$
+#unix command:
+nano countEq_getLargestEq.sh
+#after initiate the shell script, write the script and run it using the next command
+bash countEq_getLargestEq.sh CHILE
+#answer:
+country: CHILE
+total number of earthquakes:
+     192
+largest earthquakes information:
+1960	 9.5	CHILE
+
+
+
+#11 Compute the total number of earthquakes each year and then output a sorted list of the top ten years with the most earthquakes. Paste your command and the top ten list below.
+#unix command:
+cut -f 1  Year_Mag_Country.tsv | sort | uniq -c | sort -n | tail -n 10
+#the first column of the Year_Mag_Country.tsv consist of all the years listed, this command is similar to #8
+#answer:
+  59 2011
+  60 2002
+  60 2005
+  60 2009
+  61 2006
+  62 2010
+  67 2007
+  72 2003
+  77 2008
+  78 2004
+# first column as number of earthquakes, second column as the years with most frequent earthquakes 
+
+#12 Create a shell script that loops over the top ten years with the most earthquakes (from exercise 11), finds all the earthquakes for a given year and writes them to file named $YEAR-earthquakes.txt, where $YEAR is t$
+#see answer12.sh for the unix command
+#answer: no standard output, please see the output file.
