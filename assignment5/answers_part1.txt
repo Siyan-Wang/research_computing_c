@@ -1,0 +1,38 @@
+Part(1)
+
+(1a)Since A,B are square matrices with dimensions n*n, and C=AB, c is also a matrix with dimensions n*n. For each of the matrix, (sizeof(type)*n*n) bytes are used to store them, three of them will require 3 times as much.  Therefore, there will be (sizeof(type)*n*n*3)*(2^-20)megabytes used to store A,B and C. The final answer will also depend on the type of the elements in matrix, if the elements is defined as double precision, than sizeof(double)=8 bytes.
+
+(1b)For computing each element in C, there will be n multiplication operation and (n-1) addition operations need to be taken.
+
+(1c)
+do k = 1,n
+	C(i,j)= C(i,j) + A(i,k)*B(k,j)
+enddo
+
+
+(1d)C(i,j)=sum( A(i,:) * B(:,j) )
+
+
+(1e)
+do i = 1,n
+	do j =1,n
+		C(i,j)=sum( A(i,:) * B(:,j) )
+	enddo
+enddo
+
+
+(1f) (n+(n-1))*n^2   
+
+
+(1g) O(n^3)
+
+
+(1h) when n=10, time=(10^3)*t0
+when n=100, time=(100^3)*t0
+when n=1000, time=(1000^3)*t0
+
+
+(1i) C(i,j)=n
+
+
+	
