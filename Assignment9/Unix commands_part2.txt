@@ -1,0 +1,15 @@
+#download data of the US seismic stations
+
+curl -o US_seismic.txt http://ds.iris.edu/files/earthscope/usarray/_US-TA-StationList.txt
+
+
+
+#extract longitude, latitude and start_year data from the original file to a new file
+
+cut -f 6,5,8 US_seismic.txt > truncated_US_seismic.txt
+
+
+
+#delete the date from the start_year and make a new file to store the useful information
+
+sed 's/......$//' truncated_US_seismic.txt| sed '1d'  > plot_data.txt

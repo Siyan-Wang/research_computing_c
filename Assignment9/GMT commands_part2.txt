@@ -1,0 +1,32 @@
+#get to know information about us.nc
+grdinfo us.nc
+
+#color palette for the background US map
+gmt makecpt -Crelief -T-8400/4600/1500 -Z > usmap.cpt
+
+
+#color palette for the start year of seismic station 
+gmt makecpt -Crainbow -T2004/2018/2 -Z > star_year.cpt
+
+
+#shade the topography on the file us.nc
+gmt grdgradient us.nc -Ne0.6 -A100 -fg -Gus_i.nc
+
+
+#plot the shaded the topography
+gmt grdimage us.nc -Ius_i.nc -JM6i -P -Ba -Cusmap.cpt -K > USArray.ps
+
+
+#add the color scale for topography
+gmt psscale -DjTC+w5i/0.25i+h+o0/-1i -Rus.nc -J -Cusmap.cpt -I0.4 -By+lm -O -K >> USArray.ps
+
+#add the state boundaries and national boundaries
+gmt pscoast -Rus.nc -J -P -N1/thickest -N2/thinnest -Wthinnest -O -K >> USArray.ps
+
+
+#add the symbols of seismic stations
+gmt psxy -R -J -O -K @plot_data.txt  -i1,0,2 -Sc0.02i  -Cstar_year.cpt >> USArray.ps
+
+
+#add the color scale for the start year of seismic stations
+gmt psscale -Dx1i/6i+w4i/0.5i+h+o0/-1i -Rus.nc -J -Cstar_year.cpt -I0.4 -By+lyear -O >> USArray.ps
