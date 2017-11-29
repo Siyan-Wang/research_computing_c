@@ -1,0 +1,9 @@
+$ ssh sw2936@habanero.rcs.columbia.edu
+
+$ module load anaconda/3-4.4.0
+
+$ source activate geo_scipy
+
+$ sbatch alternatingSeries.sh
+
+$ more slurm-******.out
